@@ -4,7 +4,27 @@ import { View, Text, StyleSheet } from "react-native";
 import { GridItem } from "./animation-data/GridItem";
 
 class Maze extends Component {
-  state = {};
+  animationInteval = null;
+
+  state = {
+    position: "RIGHT"
+  };
+
+  componentDidMount() {
+    this.animationInteval = setInterval(() => {
+      this.setState(
+        {
+          position: this.state.position === "RIGHT" ? "LEFT" : "RIGHT"
+        },
+        2000
+      );
+    });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.animationInteval);
+    this.animationInteval = null;
+  }
 
   render() {
     return (
