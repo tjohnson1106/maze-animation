@@ -1,7 +1,21 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Dimensions } from "react-native";
 
 import { GridItem } from "./animation-data/GridItem";
+
+const { width, height } = Dimensions.get("screen");
+
+const LINE_WIDTH = 3;
+
+const RATIO = height / width;
+
+const ITEMS_PER_ROW = 6;
+
+const SIZE = width / ITEMS_PER_ROW;
+
+const ROWS = Math.round((RATIO * height) / SIZE);
+
+const TOTAL_ITEMS = ITEMS_PER_ROW * ROWS;
 
 class Maze extends Component {
   animationInterval = null;
@@ -26,8 +40,9 @@ class Maze extends Component {
   render() {
     return (
       <View style={styles.root}>
-        <GridItem pose={this.state.position} style={styles.gridItem} />
-        <View style={styles.gridItemDiagonal}>{}</View>
+        <GridItem pose={this.state.position} style={styles.gridItem}>
+          <View style={styles.gridItemDiagonal}>{}</View>
+        </GridItem>
       </View>
     );
   }
@@ -37,18 +52,22 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    backgroundColor: "#fff"
   },
   gridItem: {
     backgroundColor: "gold",
     borderWidth: 1,
     borderColor: "#333",
-    width: 200,
-    height: 200
+    width: SIZE,
+    height: SIZE,
+    alignItems: "center",
+    justifyContent: "center"
   },
   gridItemDiagonal: {
-    width: 3,
-    height: Math.sqrt(2) * 200
+    width: LINE_WIDTH,
+    height: Math.sqrt(2) * SIZE,
+    backgroundColor: "#333"
   }
 });
 
