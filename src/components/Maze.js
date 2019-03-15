@@ -17,11 +17,24 @@ const ROWS = Math.round((RATIO * height) / SIZE);
 
 const TOTAL_ITEMS = ITEMS_PER_ROW * ROWS;
 
+const POSITIONS = ["LEFT", "RIGHT"];
+
+const getRandomPosition = (arr = POSITIONS) => {
+  return arr[Math.floor(Math.random() * arr.length)];
+};
+
 class Maze extends Component {
   animationInterval = null;
 
   state = {
     position: "RIGHT"
+  };
+
+  constructGrid = () => {
+    return [...Array(TOTAL_ITEMS).keys()].map((index) => ({
+      key: index,
+      position: getRandomPosition()
+    }));
   };
 
   componentDidMount() {
