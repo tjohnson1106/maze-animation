@@ -1,15 +1,14 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions, StatusBar } from "react-native";
 
 import { GridItem } from "./animation-data/GridItem";
 
 const { width, height } = Dimensions.get("screen");
-
 const LINE_WIDTH = 3;
 
 const RATIO = height / width;
 
-const ITEMS_PER_ROW = 6;
+const ITEMS_PER_ROW = 10;
 
 const SIZE = width / ITEMS_PER_ROW;
 
@@ -23,12 +22,22 @@ const getRandomPosition = (arr = POSITIONS) => {
   return arr[Math.floor(Math.random() * arr.length)];
 };
 
+const Grid = ({ items }) =>
+  items.map(({ key, position }) => (
+    <GridItem pose={position} style={styles.gridItem}>
+      <View style={styles.gridItemDiagonal} />
+    </GridItem>
+  ));
+
 class Maze extends Component {
   animationInterval = null;
+  constructor(props) {
+    super(props);
 
-  state = {
-    position: "RIGHT"
-  };
+    this.state = {
+      items: this.constructGrid()
+    };
+  }
 
   constructGrid = () => {
     return [...Array(TOTAL_ITEMS).keys()].map((index) => ({
@@ -38,9 +47,10 @@ class Maze extends Component {
   };
 
   componentDidMount() {
+    StatusBar.setHidden(true);
     this.animationInterval = setInterval(() => {
       this.setState({
-        position: this.state.position === "RIGHT" ? "LEFT" : "RIGHT"
+        items: this.constructGrid()
       });
     }, 2000);
   }
@@ -53,9 +63,7 @@ class Maze extends Component {
   render() {
     return (
       <View style={styles.root}>
-        <GridItem pose={this.state.position} style={styles.gridItem}>
-          <View style={styles.gridItemDiagonal}>{}</View>
-        </GridItem>
+        <Grid items={this.state.items} />
       </View>
     );
   }
@@ -64,14 +72,11 @@ class Maze extends Component {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff"
+    backgroundColor: "gold",
+    flexDirection: "row",
+    flexWrap: "wrap"
   },
   gridItem: {
-    backgroundColor: "gold",
-    borderWidth: 1,
-    borderColor: "#333",
     width: SIZE,
     height: SIZE,
     alignItems: "center",
