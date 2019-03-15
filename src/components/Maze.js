@@ -4,32 +4,30 @@ import { View, Text, StyleSheet } from "react-native";
 import { GridItem } from "./animation-data/GridItem";
 
 class Maze extends Component {
-  animationInteval = null;
+  animationInterval = null;
 
   state = {
     position: "RIGHT"
   };
 
   componentDidMount() {
-    this.animationInteval = setInterval(() => {
-      this.setState(
-        {
-          position: this.state.position === "RIGHT" ? "LEFT" : "RIGHT"
-        },
-        2000
-      );
-    });
+    this.animationInterval = setInterval(() => {
+      this.setState({
+        position: this.state.position === "RIGHT" ? "LEFT" : "RIGHT"
+      });
+    }, 2000);
   }
 
   componentWillUnmount() {
-    clearInterval(this.animationInteval);
-    this.animationInteval = null;
+    clearInterval(this.animationInterval);
+    this.animationInterval = null;
   }
 
   render() {
     return (
       <View style={styles.root}>
-        <GridItem pose={"RIGHT"} style={styles.gridItem} />
+        <GridItem pose={this.state.position} style={styles.gridItem} />
+        <View style={styles.gridItemDiagonal}>{}</View>
       </View>
     );
   }
@@ -47,6 +45,10 @@ const styles = StyleSheet.create({
     borderColor: "#333",
     width: 200,
     height: 200
+  },
+  gridItemDiagonal: {
+    width: 3,
+    height: Math.sqrt(2) * 200
   }
 });
 
